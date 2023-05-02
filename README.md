@@ -1,3 +1,5 @@
+ini rubah" aja readme nya
+
 DESKRIPSI
 
 Repositori ini berisi kode program untuk Thermostat Pintar yang dibuat menggunakan bahasa assembly dan dijalankan pada platform Arduino. Sistem ini menggunakan sensor suhu untuk mengontrol suhu dalam ruangan dan mengaktifkan atau mematikan pemanas atau pendingin udara sesuai dengan nilai suhu yang terbaca.
