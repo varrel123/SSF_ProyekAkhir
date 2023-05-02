@@ -4,7 +4,7 @@
 
 ---
 
-Repositori ini berisi kode program untuk Thermostat Pintar yang dibuat menggunakan bahasa assembly dan dijalankan pada platform Arduino. Sistem ini menggunakan sensor suhu (DHT 11) dan sensor water level untuk mengontrol suhu dalam ruangan dan mengaktifkan atau mematikan pendingin ruangan sesuai dengan kondisi suhu dan ketinggian air pendingin.
+Repositori ini berisi kode program untuk Thermostat Pintar yang dibuat menggunakan bahasa assembly dan dijalankan pada platform Arduino. Sistem ini menggunakan sensor suhu (DHT 11) dan sensor water level untuk mengontrol suhu dalam ruangan dan mengaktifkan atau mematikan pendingin ruangan sesuai dengan kondisi suhu dan ketinggian air pembuangan pendingin udara (berguna untuk ruangan yang memiliki pembuangan air sementara seperti Masjid dan Student Corner karena keterbatasan lokasi).
 
 ## KOMPONEN
 
