@@ -1,4 +1,4 @@
-# THERMOSMART
+# ❄❄ THERMOSMART ❄❄
 
 ## DESKRIPSI
 
@@ -11,15 +11,12 @@ Repositori ini berisi kode program untuk Thermostat Pintar yang dibuat menggunak
 ---
 
 1. Arduino Uno atau setara
-
 2. Sensor suhu atau DHT11
 3. Sensor Water Level
-
 4. Relay atau transistor untuk kontrol pemanas atau pendingin udara
 5. Buzzer
 6. Seven Segment Display
 7. Kabel Jumper
-
 8. Modul Wi-Fi ESP8266 atau ESP32 (opsional)
 
 ## CARA KERJA
@@ -55,11 +52,7 @@ Sistem juga dilengkapi dengan display suhu yang dapat menampilkan suhu dalam dua
 ---
 
 1. Unduh atau clone repositori ini ke dalam komputer Anda
-
 2. Buka file program dalam software Arduino IDE atau editor teks yang mendukung bahasa assembly
-
 3. Sesuaikan nilai threshold suhu yang diinginkan pada kode program
-
 4. Upload kode program ke board Arduino menggunakan kabel USB atau modul programmer
-
 5. Tunggu hingga board Arduino selesai memproses program dan siap digunakan
