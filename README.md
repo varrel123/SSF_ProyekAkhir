@@ -1,58 +1,65 @@
 # ❄❄ THERMOSMART ❄❄
 
-## DESKRIPSI
+## Introduction to the problem and the solution
 
 ---
 
-Repositori ini berisi kode program untuk Thermostat Pintar yang dibuat menggunakan bahasa assembly dan dijalankan pada platform Arduino. Sistem ini menggunakan sensor suhu (DHT 11) dan sensor water level untuk mengontrol suhu dalam ruangan dan mengaktifkan atau mematikan pendingin ruangan sesuai dengan kondisi suhu dan ketinggian air pembuangan pendingin udara (berguna untuk ruangan yang memiliki pembuangan air sementara seperti Masjid dan Student Corner karena keterbatasan lokasi).
+This repository contains the source code for a Smart Thermostat created using assembly language and executed on the Arduino platform. The system uses a temperature sensor (DHT 11) and a water level sensor to control room temperature and activate or deactivate the air conditioner according to temperature and the height of the air conditioning discharge water (useful for rooms with temporary water drainage like a Mosque and Student Corner due to location constraints).
 
-## KOMPONEN
+## Hardware design and implementation details
 
 ---
 
-1. Arduino Uno atau setara
-2. Sensor suhu atau DHT11
-3. Sensor Water Level
-4. Relay atau transistor untuk kontrol pemanas atau pendingin udara
+Components schematic :
+![Schematic](https://cdn.discordapp.com/attachments/1050082669553266799/1106106409055166534/messageImage_1683364176773.jpg)
+
+1. Arduino Uno or equivalent
+2. Temperature sensor or DHT11
+3. Water level sensor
+4. Relay or transistor for heating or air conditioning control
 5. Buzzer
 6. Seven Segment Display
-7. Kabel Jumper
-8. Modul Wi-Fi ESP8266 atau ESP32 (opsional)
+7. Jumper Cables
+8. Wi-Fi module ESP8266 or ESP32 (optional)
 
-## CARA KERJA
-
----
-
-Sensor suhu akan membaca suhu dalam ruangan secara periodik. Jika suhu di atas ambang batas tertentu, sistem akan mengaktifkan relay untuk menyalakan pendingin ruangan. Begitu juga sebaliknya, jika suhu di bawah ambang batas tertentu, sistem akan mematikan relay untuk mematikan pendingin ruangan.
-
-Selain itu, sensor water level akan membaca ketinggian air pendingin dalam bak pembuangan secara periodik. Jika ketinggian air sudah mencapai level maksimum, sistem akan mematikan relay untuk mematikan pendingin ruangan.
-
-Sistem juga dilengkapi dengan display suhu yang dapat menampilkan suhu dalam dua mode yaitu Celsius dan Fahrenheit. Selain itu, sistem juga memiliki buzzer untuk memberikan notifikasi jika terjadi kondisi yang tidak normal seperti suhu terlalu tinggi atau ketinggian air sudah mencapai level maksimum.
-
-## KONFIGURASI
+## Software implementation details
 
 ---
 
-1. Siapkan semua komponen yang dibutuhkan seperti sensor suhu (DHT 11), sensor water level, Arduino Uno, relay, buzzer, display 7 segment, dan kabel jumper.
-2. Hubungkan sensor suhu dengan pin A0 pada Arduino Uno menggunakan kabel jumper.
-3. Hubungkan sensor water level dengan pin digital pada Arduino Uno menggunakan kabel jumper.
-4. Hubungkan relay dengan pin digital pada Arduino Uno menggunakan kabel jumper.
-5. Hubungkan buzzer dengan pin digital pada Arduino Uno menggunakan kabel jumper.
-6. Hubungkan display 7 segment dengan pin digital pada Arduino Uno menggunakan kabel jumper.
-7. Buat rangkaian sesuai dengan diagram pada bagian README.
-8. Buka software Arduino IDE dan buat program sesuai dengan kode pada bagian README.
-9. Upload program ke Arduino Uno menggunakan kabel USB.
-10. Pasang sensor suhu dan sensor water level di dalam ruangan yang ingin dikontrol suhunya.
-11. Sambungkan pendingin ruangan dengan relay pada rangkaian.
-12. Nyalakan Arduino Uno dan sistem siap digunakan.
-13. Jika menggunakan modul Wi-Fi, hubungkan modul ke pin serial pada Arduino dan pastikan modul telah terhubung ke jaringan Wi-Fi yang diinginkan
+The temperature sensor will periodically read the room temperature. If the temperature is above a certain threshold, the system will activate the relay to turn on the air conditioning. Similarly, if the temperature is below a certain threshold, the system will turn off the relay to turn off the air conditioning.
 
-## PENGUNAAN
+In addition, the water level sensor will periodically read the height of the air conditioning discharge water in the drainage tank. If the water level has reached the maximum level, the system will turn off the relay to turn off the air conditioning.
+
+The system is also equipped with a temperature display that can display the temperature in two modes, Celsius and Fahrenheit. Additionally, the system has a buzzer to provide notification if abnormal conditions occur such as high temperature or if the water level has reached the maximum level.
+
+## Test results and performance evaluation
 
 ---
 
-1. Unduh atau clone repositori ini ke dalam komputer Anda
-2. Buka file program dalam software Arduino IDE atau editor teks yang mendukung bahasa assembly
-3. Sesuaikan nilai threshold suhu yang diinginkan pada kode program
-4. Upload kode program ke board Arduino menggunakan kabel USB atau modul programmer
-5. Tunggu hingga board Arduino selesai memproses program dan siap digunakan
+### For Operations
+
+1. Prepare all required components such as temperature sensor (DHT 11), water level sensor, Arduino Uno, relay, buzzer, 7-segment display, and jumper cables.
+2. Connect the temperature sensor to pin A0 on the Arduino Uno using a jumper cable.
+3. Connect the water level sensor to a digital pin on the Arduino Uno using a jumper cable.
+4. Connect the relay to a digital pin on the Arduino Uno using a jumper cable.
+5. Connect the buzzer to a digital pin on the Arduino Uno using a jumper cable.
+6. Connect the 7-segment display to a digital pin on the Arduino Uno using a jumper cable.
+7. Create a circuit according to the diagram in the README section.
+8. Open the Arduino IDE software and create a program according to the code in the README section.
+9. Upload the program to the Arduino Uno using a USB cable.
+10. Install the temperature sensor and water level sensor in the room where the temperature is to be controlled.
+11. Connect the air conditioner to the relay in the circuit.
+12. Turn on the Arduino Uno and the system is ready to use.
+13. If using the Wi-Fi module, connect the module to the serial pin on the Arduino and make sure the module is connected to the desired Wi-Fi network.
+
+### For Usage
+
+1. Download or clone this repository to your computer.
+2. Open the program file in the Arduino IDE software or a text editor that supports assembly language.
+3. Adjust the desired temperature threshold values in the program code.
+4. Upload the program code to the Arduino board using a USB cable or a programmer module.
+5. Wait for the Arduino board to finish processing the program and it is ready to use.
+
+## Conclusion and future work
+
+---

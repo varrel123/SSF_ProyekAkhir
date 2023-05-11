@@ -4,6 +4,7 @@
 #define __SFR_OFFSET 0x00
 #include "avr/io.h"
 ;------------------------
+
 .global main
 ;====================================================================
 main:
@@ -13,14 +14,14 @@ main:
     STS   ADMUX, R20
     LDI   R20, 0x87     ;enable ADC, ADC prescaler CLK/128
     STS   ADCSRA, R20
-    JMP LCD_write
+    JMP   LCD_write
     RET
 ;------------------------------------------------------------------
 LCD_write:
     LDI   R23, 48       ;constants used to get ASCII values
     LDI   R24, 7        ;for chars 0-->9 & A-->F
     ;--------------------------------------------------
-    LDI   R16, 0x03
+    LDI   R16, 0xFF
     OUT   DDRD, R16     ;set port D o/p for data
     OUT   DDRB, R16     ;set port B o/p for command
     CBI   PORTB, 0      ;EN = 0
@@ -30,14 +31,14 @@ LCD_write:
     ;--------------------------------------------------
     RCALL disp_msg      ;display message on 1st line
     ;--------------------------------------------------
-    LDI   R19, 48       ;constant to get ASCII chars 0 to 9
-    RJMP  read_ADC      ;display ADC 8-bit value on LCD
-
-    LDI   R16, 0xC0     ;cursor beginning of 2nd line
-    RCALL command_wrt
+ ;   LDI   R16, 0xC0     ;cursor beginning of 2nd line
+;    RCALL command_wrt
     RCALL delay_ms
-
-    RCALL disp_msg      ;display message on 1st line
+    ;--------------------------------------------------
+        LDI   R16, 0x20
+    RCALL data_wrt      ;display LSD on LCD
+    LDI   R19, 48       ;constant to get ASCII chars 0 to 9
+    RJMP  encrypt   ;display ADC 8-bit value on LCD
 ;====================================================================
 LCD_init:
     LDI   R16, 0x33     ;init LCD for 4-bit data
@@ -153,32 +154,17 @@ l6: LPM   R16, Z+       ;load character of msg into R16
     BREQ  ext           ;if yes, exit
     RCALL data_wrt      ;if no, display character on LCD
     RJMP  l6            ;loop back & get next character
-ext:
-    ; LDI R16, 48
-    ; RCALL data_wrt 
-    RET
+ext:RET
 ;--------------------------------------------------------------------
 msg: .ascii "Temp: " ;use even number of chars in string
                                ;odd number gives compilation error!!!
 ;====================================================================
-read_ADC:
+clr:
     LDI   R20, 0xC7     ;set ADSC in ADCSRA to start conversion
     STS   ADCSRA, R20
     ;----------------------------------------------------------------
-wait_ADC:
-    LDS   R21, ADCSRA   ;check ADIF flag in ADCSRA
-    SBRS  R21, 4        ;skip jump when conversion is done (flag set)
-    RJMP  wait_ADC      ;loop until ADIF flag is set
-    ;----------------------------------------------------------------
-    LDI   R17, 0xD7     ;set ADIF flag again
-    STS   ADCSRA, R17   ;so that controller clears ADIF
-    ;----------------------------------------------------------------
-    ;LDI   R16, 40    ;get low-byte result from ADCL
-
-    LDI   R16, 0x20
-    RCALL data_wrt      ;display LSD on LCD
-
-    LDI   R16, 10     ;get high-byte result from ADCH    
+encrypt:
+    LDI   R16, 20     ;get high-byte result from ADCH    
     ;----------------------------------------------------------------
     CLR   R25           ;set counter1, initial value 0
     CLR   R23           ;set counter2, initial value 0
@@ -215,31 +201,7 @@ dsp:PUSH  R16           ;save a copy of R16 in STACK
     RCALL data_wrt      ;display LSD on LCD
 
     LDI   R16, 0x43
-    CALL data_wrt      ;display LSD on LCD
-
-    ; LDI   R16, 0x20
-    ; RCALL data_wrt      ;display LSD on LCD
-
-    ; LDI   R16, 0x20
-    ; RCALL data_wrt      ;display LSD on LCD
-
-    ; LDI   R16, 0x20
-    ; RCALL data_wrt      ;display LSD on LCD
-
-
-    ; LDI   R16, 48
-    ; RCALL data_wrt      ;display MSD on LCD
-    ; ;-----------------------------------------------------------------
-    ; LDI   R16, 50      ;mid digit in ASCII dec
-    ; RCALL data_wrt      ;display mid digit on LCD
-    ; ;-----------------------------------------------------------------
-    ; LDI   R16, 48
-    ; RCALL data_wrt      ;display LSD on LCD
-    ; ;-----------------------------------------------------------------
-    ; RCALL delay_sec     ;delay 0.5s
-    ; ;-----------------------------------------------------------------
-    ;----------------------------------------------------------------- 
-
+    RCALL data_wrt      ;display LSD on LCD
     LDI   R16, 0xC0     ;cursor beginning of 2nd line
     RCALL command_wrt
     RCALL delay_ms
@@ -249,7 +211,7 @@ dsp:PUSH  R16           ;save a copy of R16 in STACK
     LDI   R16, 0x20
     RCALL data_wrt      ;display LSD on LCD
 
-    LDI   R16, 20     ;get high-byte result from ADCH    
+    LDI   R16, 50     ;get high-byte result from ADCH    
     ;----------------------------------------------------------------
     CLR   R25           ;set counter1, initial value 0
     CLR   R23           ;set counter2, initial value 0
