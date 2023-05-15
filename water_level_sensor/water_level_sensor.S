@@ -19,7 +19,7 @@
 ;---- Main Label ----
 main:
 SBI DDRC, 0 ;sets bit 0 of DDR for port C to 1. Configures pin PC0 as O/P
-LDI R20, 0xC0 ;load the value 0xc0 into R20
+LDI R20, 0x40 ;load the value 0xc0 into R20
 STS ADMUX, R20 ;store the value of R20 to ADMUX. ADC = 2.56V, read ADC0 i/p pin
 LDI R20, 0x87 ;loads the value 0x87 (10000111 in binary) into register R20
 STS ADCSRA, R20 ;enables the ADC and sets its prescaler to 128
@@ -28,7 +28,7 @@ init_serial:
 CLR R24 ;clears register R24
 STS UCSR0A, R24 ;stores the value in R24 into UCSR0A for UART
 STS UBRR0H, R24 ;stores the value in R24 into the upper byte of (UBRR0H) for the UART.
-LDI R24, 103 ; store in UBRR0L 51
+LDI R24, 51 ; store in UBRR0L 51
 STS UBRR0L, R24 ;to set baud rate 9600
 LDI R24, 1<<RXEN0 | 1<<TXEN0 ;sets bits in R24 corresponding to RXEN0, and TXEN0 for UART.
 STS UCSR0B, R24 ;enable RXB & TXB ;stores the value in R24 to UCSR0B
