@@ -2,9 +2,7 @@
 ; Assembly code to read adc measurement results from trimpot to serial monitor
 
 
-; Bisma Alif Alghifari
-; 2106731402
-;------------------------
+
 
 
 #define __SFR_OFFSET 0x00
