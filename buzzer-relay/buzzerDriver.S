@@ -50,3 +50,12 @@ l2: IN    R20, TIFR0      ;get TIFR0 byte & check
     LDI   R20, (1<<OCF0A)
     OUT   TIFR0, R20      ;clear OCF0 flag
     RET
+    
+    
+buzzer_toggle_on:
+    SBI   PORTB, 1
+    RET
+
+buzzer_toggle_on:
+    CBI  PORTB, 1
+    RET
