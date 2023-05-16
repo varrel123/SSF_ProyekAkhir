@@ -28,3 +28,12 @@ relay_toggle:
     OUT   PORTD, R17  
     ;LDI   R18, 0
     RJMP  loop
+    
+    
+relay_toggle_on:
+    SBI   PORTB, 3
+    RET
+
+relay_toggle_on:
+    CBI  PORTB, 3
+    RET
