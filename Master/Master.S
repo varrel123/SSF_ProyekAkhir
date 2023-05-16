@@ -23,17 +23,29 @@ RET
 
 again:
   ;--------------------------------------------------------
-  ; SPI for DHT
+  ; SPI for DHT and Water Sensor
   ;--------------------------------------------------------
   RCALL dht_start     ;data read in R18
   CBI PORTD, SS       ;enable slave device
-  CLR R18
-  LDI R18, 0x30
   OUT SPDR, R18       ;transmit byte to slave
   loop: 
     IN R18, SPSR
     SBRS R18, SPIF    ;wait for byte transmission
     RJMP loop         ;to complete
+  
+  RCALL sensor_Water
+  OUT SPDR, R16  ; transfer low byte sensor water
+    loop1: 
+    IN R16, SPSR
+    SBRS R16, SPIF    ;wait for byte transmission
+    RJMP loop1         ;to complete
+
+  OUT SPDR, R25  ; transfer high byte sensor water
+    loop1: 
+    IN R25, SPSR
+    SBRS R25, SPIF    ;wait for byte transmission
+    RJMP loop1         ;to complete
+
   SBI PORTD, SS       ;disable slave device
   ;--------------------------------------------------------
 
@@ -77,7 +89,7 @@ DHT11_reading:
   skp:LSL R18         ;shift in 0 into LSB data register
   ;-------------------------------------------------------
   w5: SBIC PIND, 5
-  RJMP w5             ;wait for DHT11 low pulse
+  RJMP w5             ;wait for DHT11 low pulses
   ;-------------------------------------------------------
   DEC R17             ;decrement counter
   BRNE w4             ;go back & detect next bit
@@ -139,3 +151,24 @@ delay_4sec: ;4 sec delay via timer1
   STS TCCR1B, R20 ;stop timer0
   RET
 
+sensor_Water:
+    SBI DDRC, 0 ;sets bit 0 of DDR for port C to 1. Configures pin PC0 as O/P
+    LDI R20, 0x40 ;load the value 0xc0 into R20
+    STS ADMUX, R20 ;store the value of R20 to ADMUX. ADC = 5V, read ADC0 i/p pin
+    LDI R20, 0x87 ;loads the value 0x87 (10000111 in binary) into register R20
+    STS ADCSRA, R20 ;enables the ADC and sets its prescaler to 128
+
+water_ADC:
+    LDI R23, 48 ;constants used to get ASCII values
+    LDI R24, 7 ;for chars 0-->9 & A-->F
+    LDI R20, 0xC7 ;set ADSC in ADCSRA to start conversion
+    STS ADCSRA, R20
+wait_ADC:
+    LDS R21, ADCSRA ;check ADIF flag in ADCSRA
+    SBRS R21, 4 ;skip jump when conversion is done (flag set)
+    RJMP wait_ADC ;loop until ADIF flag is set
+    LDI R17, 0xD7 ;set ADIF flag again
+    STS ADCSRA, R17 ;so that controller clears ADIF
+    LDS R16, ADCL ;get low-byte result from ADCL
+    LDS R25, ADCH ;get high-byte result from ADCH
+    RET
