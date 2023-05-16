@@ -19,21 +19,49 @@ main:
     STS   ADMUX, R20
     LDI   R20, 0x87     ;enable ADC, ADC prescaler CLK/128
     STS   ADCSRA, R20
-      LDI R21, 0xF0
-  OUT DDRD, R21 ;port D[7:4] is o/p
-  LDI R17, (1<<SPE)
-  OUT SPCR, R17 ;enable SPI as slave
+    LDI R21, 0xF0
+    OUT DDRD, R21 ;port D[7:4] is o/p
+    LDI R17, (1<<SPE)
+    OUT SPCR, R17 ;enable SPI as slave
 
   ;-------------------------------------------------------
   ; SPI reading
   ;-------------------------------------------------------
-  l22:
+  l22: ;read byte temp
     IN R18, SPSR
     SBRS R18, SPIF  ;wait for byte reception
-    ;RJMP l22
-
+    RJMP l22
   IN R28, SPDR       ;i/p byte from data register
-  RCALL LCD_write
+
+    LDI R17, (0<<SPE)
+    OUT SPCR, R17 ;disable SPI as slave
+    RCALL LCD_write
+
+    LDI R17, (1<<SPE)
+    OUT SPCR, R17 ;enable SPI as slave
+    
+  l33: ;read byte water level
+    IN R18, SPSR
+    SBRS R18, SPIF  ;wait for byte reception
+    RJMP l33
+    IN R28, SPDR       ;i/p low byte water level
+
+    LDI R17, (0<<SPE)
+    OUT SPCR, R17 ;disable SPI as slave
+    RCALL LCD_write
+
+    LDI R17, (1<<SPE)
+    OUT SPCR, R17 ;enable SPI as slave
+  l44:
+    IN R18, SPSR
+    SBRS R18, SPIF  ;wait for byte reception
+    RJMP l44
+    IN R28, SPDR       ;i/p high byte water level
+
+    LDI R17, (0<<SPE)
+    OUT SPCR, R17 ;disable SPI as slave
+    RCALL LCD_write
+
   RJMP main
 ;------------------------------------------------------------------
 LCD_write:
@@ -218,9 +246,8 @@ dsp:PUSH  R16           ;save a copy of R16 in STACK
 
     LDI   R16, 0x20
     RCALL data_wrt      ;display LSD on LCD
+    RET
 
-    LDI   R16, 0x43
-    RCALL data_wrt      ;display LSD on LCD
     LDI   R16, 0xC0     ;cursor beginning of 2nd line
     RCALL command_wrt
     RCALL delay_ms
@@ -266,9 +293,6 @@ dsp1:PUSH  R16           ;save a copy of R16 in STACK
     LDI   R16, 0x20
     RCALL data_wrt      ;display LSD on LCD
 
-    LDI   R16, 0x25
-    RCALL data_wrt      ;display LSD on LCD
-
     RET
 
 ;=====================================================================
@@ -303,9 +327,8 @@ dsp2:
       MOV   R17, R30        ;select digit
       RCALL encrypt      ;send command & data to MAX7219    
       ;--------------------------------------------------------
-      RET
-      
-      
+
+
 check_temperature:
     CPI R16, 22
     BRLO relay_toggle_off
@@ -317,12 +340,11 @@ check_water_lvl:
     RET
 
 
-
 buzzer_toggle_on:
     SBI   PORTB, 1
     RET
 
-buzzer_toggle_on:
+buzzer_toggle_off:
     CBI  PORTB, 1
     RET
 
@@ -330,6 +352,6 @@ relay_toggle_on:
     SBI   PORTB, 3
     RET
 
-relay_toggle_on:
+relay_toggle_off:
     CBI  PORTB, 3
     RET
