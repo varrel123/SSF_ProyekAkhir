@@ -32,21 +32,6 @@ w3: SBIC  PIND, 3
     MOV   R25, R24
     RCALL DHT11_reading
     RCALL DHT11_reading ;read temp (3rd byte of 40-bit data)
-;-----------------------------------------------------------------
-;convert temp & humidity bytes to decimal & display on MAX7219
-;-------------------------------------------------------------
-    MOV   R28, R24
-    LDI   R29, 0x07
-    LDI   R30, 0x06
-    ;-------------------
-    RCALL binary2decimal  ;temp in decimal
-    ;-------------------
-    MOV   R28, R25
-    LDI   R29, 0x02
-    LDI   R30, 0x01
-    ;-------------------
-    RCALL binary2decimal  ;humidity in decimal
-    ;-------------------
     RJMP  agn           ;go back & get another sensor reading
 ;=================================================================
 DHT11_reading:
@@ -116,33 +101,3 @@ l16: IN    R20, TIFR0      ;get TIFR0 byte & check
     LDI   R20, (1<<OCF0A)
     OUT   TIFR0, R20      ;clear OCF0 flag
     RET
-
-
-;==============================================================
-binary2decimal:
-;--------------
-      CLR   R26             ;set counter1, initial value 0
-      CLR   R27             ;set counter2, initial value 0
-      ;--------------------------------------------------------
-l70:  CPI   R28, 100        ;compare R28 with 100
-Ret2:  BRMI  l80             ;jump when R28 < 100
-      INC   R26             ;increment counter1 by 1
-      SUBI  R28, 100        ;R28 = R28 - 100
-      RJMP  l70
-      ;--------------------------------------------------------
-l80:  CPI   R28, 10         ;compare R28 with 10
-      BRMI  dsp2             ;jump when R28 < 10
-      INC   R27             ;increment counter2 by 1
-      SUBI  R28, 10         ;R28 = R28 - 10
-      RJMP  l80
-      ;--------------------------------------------------------  
-dsp2:  
-      MOV   R18, R27
-      MOV   R17, R29        ;select digit
-      ;RCALL encrypt      ;send command & data to MAX7219
-      ;--------------------------------------------------------
-      ;MOV   R18, R28
-      ;MOV   R17, R30        ;select digit
-      ;RCALL send_bytes      ;send command & data to MAX7219    
-      ;--------------------------------------------------------
-      RET
