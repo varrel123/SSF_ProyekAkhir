@@ -304,3 +304,32 @@ dsp2:
       RCALL encrypt      ;send command & data to MAX7219    
       ;--------------------------------------------------------
       RET
+      
+      
+check_temperature:
+    CPI R16, 22
+    BRLO relay_toggle_off
+    RET
+
+check_water_lvl:
+    CPI R16, 22
+    BRLO buzzer_toggle_off
+    RET
+
+
+
+buzzer_toggle_on:
+    SBI   PORTB, 1
+    RET
+
+buzzer_toggle_on:
+    CBI  PORTB, 1
+    RET
+
+relay_toggle_on:
+    SBI   PORTB, 3
+    RET
+
+relay_toggle_on:
+    CBI  PORTB, 3
+    RET
